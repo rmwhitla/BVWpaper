@@ -1,3 +1,7 @@
-snakemake --cores 12 --latency-wait 120 --rerun-incomplete --use-conda --use-singularity --singularity-args "--bind /storage/" &> outputfile.out
+
+
+snakemake --cores 16 --use-singularity --use-conda --singularity-args "--bind /storage/" -npr &> outfile.out
+
+
 
 

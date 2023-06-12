@@ -38,18 +38,18 @@ mlRhoDf <- inner_join(mlRhoDf, info, by="sample_name")
 
 #boxplot by location
 mlRhoDf %>% 
-  ggplot(aes(x=Region, y=as.numeric(theta_est))) +
+  ggplot(aes(x=Region, y=as.numeric(theta_est)*1000)) +
   geom_boxplot() + geom_jitter(aes(shape=origin), size=2) + theme_bw()  + xlab("Region of Origin") + ylab("Heterozygotes/1000 basepairs")
 
 #scatterplot of british samples over years
 mlRhoDf %>% 
   filter(Region=="GB") %>%
-  ggplot(aes(x=year, y=theta_est)) +
+  ggplot(aes(x=year, y=as.numeric(theta_est)*1000)) +
   geom_point() + theme_bw()  + xlab("Year") + ylab("Heterozygotes/1000 basepairs") + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 #Boxplot comparing kent vs other GB samples
 mlRhoDf %>% 
   filter(Region=="GB" & location != "Unknown") %>%
-  ggplot(aes(x=kent, y=as.numeric(theta_est))) +
+  ggplot(aes(x=kent, y=as.numeric(theta_est)*1000)) +
   geom_boxplot() + geom_jitter() + theme_bw()  + xlab("Kent vs. Rest of GB") + ylab("Heterozygotes/1000 basepairs")

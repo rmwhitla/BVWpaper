@@ -13,9 +13,9 @@ hist_dir="/storage/PROJECTS/Rebecca/generode_test/GenErode/results/historical/ml
 #modern data
 mod_dir="/storage/PROJECTS/Rebecca/generode_test/GenErode/results/modern/mlRho/Aporia_crataegi-GCA_912999735.1-softmasked"
 
-#Get filenames
-hist_files <- list.files(path = hist_dir, pattern = "*mlRho.txt", full.names=T)
-mod_files <- list.files(path = mod_dir, pattern = "*mlRho.txt", full.names=T)
+#Get filenames for autosomes only
+hist_files <- list.files(path = hist_dir, pattern = "*autos.mlRho.txt", full.names=T)
+mod_files <- list.files(path = mod_dir, pattern = "*autos.mlRho.txt", full.names=T)
 
 all_files <- c(hist_files[3:23], mod_files)
 

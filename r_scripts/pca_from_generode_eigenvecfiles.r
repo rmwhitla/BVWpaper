@@ -5,8 +5,8 @@ library("ggplot2")
 install.packages("ggrepel")
 library("ggrepel")
 
-setwd("/storage/PROJECTS/Rebecca/generode_test/GenErode/results/historical/pca")
-ret_pca=read.table("Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.2.eigenvec")
+setwd("/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/pca/")
+ret_pca=read.table("Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.1.eigenvec")
 attach(ret_pca)
 
 
@@ -20,17 +20,17 @@ ggplot(ret_pca, aes(x=V3, y=V4))+ geom_point(size=2, shape=1)+
 ggplot(ret_pca, aes(x=V3, y=V4))+ geom_point(size=2, shape=1)+  
   geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
   geom_point(aes(col=V1), size=2)+
-  coord_cartesian(ylim=c(-0.025, 0.15), xlim=c(-0.1, 0.025)) 
+  coord_cartesian(ylim=c(-0.1, 0.0), xlim=c(-0.15, 0.0)) 
 
 
 #############------------
 
 #this is to group samples
-V0 = c("Kent Late", "Unknown Late", "Unknown Late","Wales Early", "Kent Late", "Kent Late", "Kent Late", "Kent Late", "Kent Early", "Hampshire Late", "Wales Early", "Kent Early", "Europe 20C", "Europe 20C", "Europe 20C", "Europe 20C", "Hampshire Early", "Hampshire Early", "Kent Early")
-ret_pca$Population <- V0
+V0 = c("Late", "Early", "Late", "Late", "Late", "Late", "Early", "Late", "Early", "Early", "EU Late", "EU Late", "EU Late", "EU Late", "Early", "Early", "Early")
+ret_pca$Time <- V0
 
-Groups = c("UK Late", "Unknown Late", "Unknown Late", "UK Early", "UK Late", "UK Late", "UK Late", "UK Late", "UK Early", "UK Late", "UK Early", "UK Early", "Europe Late", "Europe Late", "Europe Late", "Europe Late", "UK Early", "UK Early", "UK Early")
-ret_pca$Grouped_Populations <- Groups
+Area = c("Unknown", "Wales", "SE", "SE", "SE", "SE", "SE", "S", "Wales", "SE", "Belgium", "Belgium", "France", "France", "S", "S", "SE")
+ret_pca$Pop_Area <- Area
 
 
 install.packages("sp")
@@ -42,18 +42,32 @@ library("gridExtra")
 
 
 
-full_pca <- ggplot(ret_pca, aes(x=V3, y=V4))+
+time_pca <- ggplot(ret_pca, aes(x=V3, y=V4))+
   geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Grouped_Populations), size=2, shape=19)
+  geom_point(aes(col=Time), size=2, shape=19)
 #  coord_cartesian(ylim=c(-0.8, 0.8), xlim=c(-0.2, -0.1)) 
 #take out coord_cartesian for full image
-full_pca
+time_pca
 
-zoom_pca <-ggplot(ret_pca, aes(x=V3, y=V4))+
+zoom_time_pca <-ggplot(ret_pca, aes(x=V3, y=V4))+
   geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Grouped_Populations), size=2, shape=19)+
-  coord_cartesian(ylim=c(-0.025, 0.15), xlim=c(-0.075, -0.04)) 
-zoom_pca
+  geom_point(aes(col=Time), size=2, shape=19)+
+  coord_cartesian(ylim=c(-0.25, 0.25), xlim=c(-0.15, 0.01)) 
+zoom_time_pca
+
+
+area_pca <- ggplot(ret_pca, aes(x=V3, y=V4))+
+  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
+  geom_point(aes(col=Pop_Area), size=2, shape=19)
+#  coord_cartesian(ylim=c(-0.8, 0.8), xlim=c(-0.2, -0.1)) 
+#take out coord_cartesian for full image
+area_pca
+
+zoom_area_pca <-ggplot(ret_pca, aes(x=V3, y=V4))+
+  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
+  geom_point(aes(col=Pop_Area), size=2, shape=19)+
+  coord_cartesian(ylim=c(-0.25, 0.25), xlim=c(-0.15, 0.01)) 
+zoom_area_pca
 
 ggplot
 

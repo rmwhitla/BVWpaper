@@ -4,71 +4,31 @@ install.packages("ggplot2")
 library("ggplot2")
 install.packages("ggrepel")
 library("ggrepel")
+install.packages("wesanderson")
+library("wesanderson")
 
-setwd("/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/pca/")
-ret_pca=read.table("Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.1.eigenvec")
+ret_pca=read.table("Aporia_crataegi-GCA_912999735.1-softmasked.all.merged.biallelic.fmissing0.1.minallelefreq0.1.eigenvec")
 attach(ret_pca)
 
+colnames(ret_pca) <- c("sample_name", "sample", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "PC16", "PC17")
 
-ggplot(ret_pca, aes(x=V3, y=V4))+ geom_point(size=2, shape=1)+  
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=V1), size=2)
-#  coord_cartesian(ylim=c(-0.3, 0.4), xlim=c(-0.2, 0.0)) 
-#take out coord_cartesian for full image. 
+#read in info file
+info <- read_delim("/storage/PROJECTS/Rebecca/analysis/infofile.tsv", delim="\t", col_types = cols())
+
+#merge the two data frames
+PCA_info <- inner_join(ret_pca, info, by="sample_name")
+
+
+
+ggplot(PCA_info, aes(x=PC1, y=PC2))+ geom_point(size=2, shape=1)+  
+  geom_text_repel(aes(label = PCA_info$sample_name), size = 3, max.overlaps = 15)+
+  geom_point(aes(col=Region), size=2)+
+  coord_fixed()+
+  ylab("PC2 8.93%")+
+  xlab("PC1 12.51%")+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+               panel.background = element_blank(), axis.line = element_line(colour = "black"))
 #this code techncially  gives 2 layers for data points - one for outliine and one for filled point
+#get pca values frmo eigenval files - each number is effect of pc1 as proportion of total of all numbers
 
-ggplot(ret_pca, aes(x=V3, y=V4))+ geom_point(size=2, shape=1)+  
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=V1), size=2)+
-  coord_cartesian(ylim=c(-0.1, 0.0), xlim=c(-0.15, 0.0)) 
-
-
-#############------------
-
-#this is to group samples
-V0 = c("Late", "Early", "Late", "Late", "Late", "Late", "Early", "Late", "Early", "Early", "EU Late", "EU Late", "EU Late", "EU Late", "Early", "Early", "Early")
-ret_pca$Time <- V0
-
-Area = c("Unknown", "Wales", "SE", "SE", "SE", "SE", "SE", "S", "Wales", "SE", "Belgium", "Belgium", "France", "France", "S", "S", "SE")
-ret_pca$Pop_Area <- Area
-
-
-install.packages("sp")
-library("sp")
-install.packages("grid")
-library("grid")
-install.packages("gridExtra")
-library("gridExtra")
-
-
-
-time_pca <- ggplot(ret_pca, aes(x=V3, y=V4))+
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Time), size=2, shape=19)
-#  coord_cartesian(ylim=c(-0.8, 0.8), xlim=c(-0.2, -0.1)) 
-#take out coord_cartesian for full image
-time_pca
-
-zoom_time_pca <-ggplot(ret_pca, aes(x=V3, y=V4))+
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Time), size=2, shape=19)+
-  coord_cartesian(ylim=c(-0.25, 0.25), xlim=c(-0.15, 0.01)) 
-zoom_time_pca
-
-
-area_pca <- ggplot(ret_pca, aes(x=V3, y=V4))+
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Pop_Area), size=2, shape=19)
-#  coord_cartesian(ylim=c(-0.8, 0.8), xlim=c(-0.2, -0.1)) 
-#take out coord_cartesian for full image
-area_pca
-
-zoom_area_pca <-ggplot(ret_pca, aes(x=V3, y=V4))+
-  geom_text_repel(aes(label = ret_pca$V1), size = 3, max.overlaps = 15)+
-  geom_point(aes(col=Pop_Area), size=2, shape=19)+
-  coord_cartesian(ylim=c(-0.25, 0.25), xlim=c(-0.15, 0.01)) 
-zoom_area_pca
-
-ggplot
-
-
+##group by pre/post 11880?

@@ -12,14 +12,14 @@ library(dplyr)
 
 ROH_bvw=read.table("Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.1.hwe0.05.homsnp25.homkb100.homwinsnp50.homwinhet2.homwinmis10.homhet3.hom.indiv")
 
-#read in info file
+#read in info file#read in info file
 info <- read_delim("/storage/PROJECTS/Rebecca/analysis/infofile.tsv", delim="\t", col_types = cols())
+
 
 colnames(ROH_bvw) <- c("sample_name", "IID", "PHE", "NSEG", "KB", "KBAVG")
 
 #merge the two data frames
 ROH_info <- inner_join(ROH_bvw, info, by="sample_name")
-
 ROH_info %>%
   ggplot(aes(x = Region, y = as.numeric(NSEG))) +
   geom_boxplot() +
@@ -27,7 +27,7 @@ ROH_info %>%
   theme_bw() +
   xlab("Region") +
   ylab("Number of ROH")
-#control for different number of samples?
+#control for different number of samples? welchs
 
 ROH_info %>%
   ggplot(aes(x = kent, y = as.numeric(NSEG))) +
@@ -42,6 +42,7 @@ V0 = c("Late", "Early", "Late", "Late", "Late", "Late", "Early", "Late", "Early"
 ROH_info$Time <- V0
 
 ROH_info %>%
+  filter(Region=="GB") %>%
   ggplot(aes(x = Time, y = as.numeric(NSEG))) +
   geom_boxplot() +
   geom_jitter(aes(shape = Time), size = 2) +

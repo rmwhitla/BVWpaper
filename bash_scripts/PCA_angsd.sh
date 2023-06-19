@@ -9,7 +9,6 @@
 ############################
 #PATHS
 ANGSD=/opt/angsd/angsd
-PCANGSD=/opt/pcangsd/pcangsd/pcangsd.py
 ###########################
 
 INBAMS=$1 # command line arguement list of full paths to all BAMS
@@ -18,4 +17,4 @@ INBAMS=$1 # command line arguement list of full paths to all BAMS
 $ANGSD -GL 2 -out genolike -nThreads 10 -doGlf 2 -doMajorMinor 1 -SNP_pval 1e-6 -uniqueOnly 1 -doMaf 2 -minMapQ 30 -minQ 20 -skipTriallelic 1 -minMaf 0.1 -doDepth 1 -doCounts 1 -bam $INBAMS
 
 #step 2
-python3 $PCANGSD --minMaf 0.1 -beagle genolike.beagle.gz -o angsdPCA
+pcangsd --minMaf 0.1 --beagle genolike.beagle.gz -o angsdPCA

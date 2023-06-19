@@ -2,3 +2,6 @@
 *.token
 genolike*
 angsdPCA*
+*.vcf
+*.log
+*.pi

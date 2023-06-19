@@ -2,9 +2,13 @@
 
 #required packages
 library(ggplot2)
+install.packages("readr")
 library(readr)
+install.packages("purrr")
 library(purrr)
+install.packages("stringr")
 library(stringr)
+install.packages("dplyr")
 library(dplyr)
 library("ggrepel")
 
@@ -25,13 +29,14 @@ mlRhoDf <- all_files %>%
   setNames(nm = .) %>%
   map_df(~read_delim(.x, delim="\t", col_types = cols(), col_names =c("d", "n", "theta", "epsilon", "-log(L)"), skip=1, comment="#"), , .id = "file_name")   
 
-#Extract sample name and make a new column with it
+
+#extract sample name and make a new column with it
 mlRhoDf$sample_name <-str_extract(basename(mlRhoDf$file_name),  "[^\\.]+")
 #Extract theta estimate from lower/upper bounds
 mlRhoDf$theta_est<-str_match(mlRhoDf$theta, "<\\s*(.*?)\\s*<")[,2]
 
 #read in info file
-info <- read_delim("../infofile.tsv", delim="\t", col_types = cols())
+info <- read_delim("/storage/PROJECTS/Rebecca/analysis/infofile.tsv", delim="\t", col_types = cols())
 
 #merge the two data frames
 mlRhoDf <- inner_join(mlRhoDf, info, by="sample_name")

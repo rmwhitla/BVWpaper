@@ -6,3 +6,5 @@ angsdPCA*
 *.log
 *.pi
 angsd*
+A_*
+-do*

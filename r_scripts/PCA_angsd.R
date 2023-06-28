@@ -1,7 +1,7 @@
 #PCA plots for outputs from generode
 library("ggplot2")
 library("ggrepel")
-library(ddplyr)
+library(dplyr)
 library(stringr)
 
 #read in info file
@@ -13,7 +13,7 @@ C <- as.matrix(read.table("/storageToo/PROJECTS/Saad/repos/BVWpaper/bash_scripts
 e <- eigen(C)
 
 #read in order of samples from PCAangsd
-sampleOrder <- read.table("/storageToo/PROJECTS/Saad/repos/BVWpaper/bash_scripts/BAMS.txt")
+sampleOrder <- read.table("/storageToo/PROJECTS/Saad/repos/BVWpaper/BAMS.txt")
 #combine eigenvectors with info
 pca <- data.frame(sample_name=str_extract(basename(sampleOrder$V1),  "[^\\.]+"), PC1=e$vectors[,1], PC2=e$vectors[,2], PC3=e$vectors[,3])
 #Combine info and eigenvector table

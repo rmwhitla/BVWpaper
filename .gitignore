@@ -8,3 +8,5 @@ angsdPCA*
 angsd*
 A_*
 -do*
+*.log
+*.nosex

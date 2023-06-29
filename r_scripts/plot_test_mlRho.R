@@ -2,13 +2,13 @@
 
 #required packages
 library(ggplot2)
-install.packages("readr")
+#install.packages("readr")
 library(readr)
-install.packages("purrr")
+#install.packages("purrr")
 library(purrr)
-install.packages("stringr")
+#install.packages("stringr")
 library(stringr)
-install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
 library("ggrepel")
 
@@ -45,7 +45,7 @@ mlRhoDf <- inner_join(mlRhoDf, info, by="sample_name")
 #boxplot by location
 mlRhoDf %>% 
   ggplot(aes(x=Region, y=as.numeric(theta_est)*1000)) +
-  geom_boxplot() + geom_jitter(aes(shape=origin), size=2) + theme_bw()  + xlab("Region of Origin") + ylab("Heterozygotes/1000 basepairs")
+  geom_boxplot(outlier.shape = NA) + geom_jitter(aes(shape=origin), size=2) + theme_bw()  + xlab("Region of Origin") + ylab("Heterozygotes/1000 basepairs")
 
 #scatterplot of british samples over years
 mlRhoDf %>% 
@@ -60,4 +60,4 @@ mlRhoDf %>%
 mlRhoDf %>% 
   filter(Region=="GB" & location != "Unknown") %>%
   ggplot(aes(x=kent, y=as.numeric(theta_est)*1000)) +
-  geom_boxplot() + geom_jitter() + theme_bw()  + xlab("Kent vs. Rest of GB") + ylab("Heterozygotes/1000 basepairs")
+  geom_boxplot(outlier.shape = NA) + geom_jitter() + theme_bw()  + xlab("Kent vs. Rest of GB") + ylab("Heterozygotes/1000 basepairs")

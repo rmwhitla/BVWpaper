@@ -2,3 +2,11 @@
 *.token
 genolike*
 angsdPCA*
+*.vcf
+*.log
+*.pi
+angsd*
+A_*
+-do*
+*.log
+*.nosex

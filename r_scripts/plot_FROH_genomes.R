@@ -19,7 +19,7 @@ mRuns <- readExternalRuns(inputFile = mRunFile, program="plink")
 hRuns$group <- ifelse(hRuns$id %in% c("K05L", "NHM0247274489", "NHM0247274928", "NHM0247276019", "NHM0247276026",  "OX10", 
                                           "OX4",           "OX5",          "OX8"), "GB", hRuns$group)
 #Suspect GB samples
-hRuns$group <- ifelse(hRuns$id %in% c("NHM0247274898" , "NHM0247274918",  "NHM0247276027"), "GB?", hRuns$group)
+hRuns$group <- ifelse(hRuns$id %in% c("NHM0247274898" , "NHM0247274918",  "NHM0247276027"), "EU", hRuns$group)
 
 #European
 hRuns$group <- ifelse(hRuns$id %in% c("OX11", "OX13", "OX15","OX16" ), "EU", hRuns$group)

@@ -144,3 +144,29 @@ allRunsNoZ <- rbind(hRuns_noZ, mRuns_noZ)
 #plotting runs along chromosomes
 plot_Runs_mod(runs=allRunsNoZ)
 
+#plot fROH across time
+#read in info file
+info <- read_delim("/storageToo/PROJECTS/Saad/repos/BVWpaper/infofile.tsv", delim="\t", col_types = cols())
+FROH_class <- summaryList$result_Froh_class
+FROH_class <- FROH_class %>% rename("sample_name" = "id")
+FROH_df <- inner_join(FROH_class, info, by="sample_name")
+
+FROH_df %>% 
+  filter(Region=="GB") %>%
+  ggplot(aes(x=year, y=Froh_Class_0.1)) +
+  geom_point(size=3) +  #scale_fill_manual(values=c("#ffb14e", "#fa8775","#ea5f94", "#cd34b5", "#aca7a7"))+
+  theme_bw()  + xlab("Year") + ylab("FROH 200 kb") + geom_smooth(method='lm') +
+  geom_text_repel(aes(label = sample_name), size = 3, max.overlaps = 30)+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) 
+  
+  #geom_point(aes(x=1908, y=0.08265762, color="blue")) #adding japanese point manually
+
+#plot FROH between groups
+FROH_df %>% 
+  ggplot(aes(x=Region, y=Froh_Class_0.1)) +
+  geom_boxplot() +geom_jitter()+ #scale_fill_manual(values=c("#ffb14e", "#fa8775","#ea5f94", "#cd34b5", "#aca7a7"))+
+  theme_bw()  + xlab("Region") + ylab("FROH 100 kb") + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+wilcox.test(Froh_Class_0.1~Region, data=FROH_df)
+t.test(Froh_Class_0.1~Region, data=FROH_df)

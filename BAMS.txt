@@ -15,4 +15,3 @@
 /storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/mapping/Aporia_crataegi-GCA_912999735.1-softmasked/OX4.merged.rmdup.merged.realn.rescaled.bam
 /storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/mapping/Aporia_crataegi-GCA_912999735.1-softmasked/OX5.merged.rmdup.merged.realn.rescaled.bam
 /storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/mapping/Aporia_crataegi-GCA_912999735.1-softmasked/OX8.merged.rmdup.merged.realn.rescaled.bam
-/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/modern/mapping/Aporia_crataegi-GCA_912999735.1-softmasked/SRR7948941.merged.rmdup.merged.realn.mapped_q30.subs_dp10.bam

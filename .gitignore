@@ -10,3 +10,10 @@ A_*
 -do*
 *.log
 *.nosex
+.Rproj.user
+*tiff
+*jpg
+*png
+Main_figures_files/
+Main_figures.pdf
+Main_figures.tex

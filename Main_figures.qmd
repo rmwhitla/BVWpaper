@@ -1,0 +1,137 @@
+---
+title: "Main Figures & Analysis"
+format:
+  pdf:
+    fig-dpi: 900
+    fig-width: 10
+    fig-height: 10
+include-in-header: 
+  text: |
+    \usepackage{fvextra}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+keep-tex: true
+---
+
+
+## Figure 1
+
+This should be a two panel plot. Panel A shows map of BVW sampling localities and Panel B shows PCA of genotype likelihoods using ANGSD on the BAM files.
+
+```{r}
+#| label: Fig 1
+#| fig-cap: "Figure 1"
+
+#Load require packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggspatial)
+library(patchwork)
+library(jpeg)
+library(ggrepel)
+library(stringr)
+library(ggpubr)
+
+#Step 1: plot the points on a map
+
+#read in info file
+info <- read_delim("./infofile.tsv", delim="\t", col_types = cols())
+#get map data
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+#set default plotting themes
+theme_set(theme_bw())
+options(ggrepel.max.overlaps = Inf)
+
+#plot the map
+detail<- ggplot(data=world) +
+  geom_sf(colour="black",fill="white" )+
+  geom_point( data=info %>% filter(Original_region == "GB"), 
+              size=2, aes(x=longitude, y=latitude), shape=19, alpha=0.75) + 
+  geom_point( data=info %>% filter(Original_region == "Europe"), size=2, 
+              aes(x=longitude, y=latitude), shape=17, alpha=0.75) + 
+  geom_label_repel(data=info %>% filter(Original_region != "Japan"), 
+                   box.padding = 0.5, aes(x=longitude, y=latitude, label = short_specimen_name), size = 3)+
+  coord_sf(xlim = c(-6, 9), ylim = c(45, 53), expand = FALSE) + xlab("") + ylab("") + 
+  annotation_scale(location = "bl", width_hint = 0.4) +
+  annotation_north_arrow(location = "bl", which_north = "true", 
+                         #pad_x = unit(0.75, "in"), pad_y = unit(0.5, "in"),
+                         style = north_arrow_minimal) +
+  ggtitle("A") + 
+  theme(plot.title = element_text(vjust = -7, hjust=0.02, size = 20, face = "bold"),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "aliceblue"),
+        plot.margin=grid::unit(c(0,0,0,0), "mm") )
+
+#inset to disaply the general regions
+global<- ggplot(data=world) +
+  geom_sf(colour="black",fill="white" )+
+  coord_sf(xlim = c(-11, 17), ylim = c(37, 63), expand = T) + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "aliceblue"), 
+        panel.border = element_rect(color = "black",fill = NA, size = 1),
+        plot.margin=grid::unit(c(0,0,0,0), "mm"))
+
+#get butterfly image
+#TODO: get more suitabke image
+white <- readJPEG("./images/white.jpg", native=T)
+
+#Combine all 3 elements to generate single figure
+map <- detail + 
+      inset_element(global, left = .7, bottom = .66, top = 1, right = 1.1) + 
+      inset_element(white, left = .87, bottom = 0.01, top = .13, right = .99)
+
+#Step 2: Generate Genotype Likelihoods 
+#use the bash script PCA_angsd.sh to generate PCA from genotype likliehoods
+
+#Step 3: Perform PCA  with MAF of 10% and plot
+#read in covariance matix output from angsd
+C <- as.matrix(read.table("./angsdPCA.cov"))
+#perform eigendecomposition of matrix
+e <- eigen(C)
+
+#read in order of samples from PCAangsd
+sampleOrder <- read.table("./BAMS.txt")
+#combine eigenvectors with info
+pca <- data.frame(sample_name=str_extract(basename(sampleOrder$V1),  
+                  "[^\\.]+"), PC1=e$vectors[,1], PC2=e$vectors[,2], PC3=e$vectors[,3])
+#Combine info and eigenvector table
+angsdPCAdf <- inner_join(pca, info, by="sample_name")
+
+#calculate variance explained by PC1,2,3
+pc1=round(e$values[1]/sum(e$values) *100,2)
+pc2=round(e$values[2]/sum(e$values) *100,2)
+pc3=round(e$values[3]/sum(e$values) *100,2)
+
+#Plot the PCA
+pca <- angsdPCAdf %>%
+  ggplot(aes(x=PC1, y=PC2,shape=Original_region, col= Region_postPCA)) +
+  geom_point(size=2, aes())+ scale_shape_manual(values=c(17,19)) +
+  scale_color_manual(values=c("dark grey", "#000000"))+
+  geom_label_repel(aes(label = short_specimen_name), size = 3)+
+  guides(color="none", shape="none") +
+  xlab(paste0("PC1 ", pc1, "%")) + ylab(paste0("PC1 ", pc2, "%"))+
+  coord_fixed(ratio=1) + 
+  ggtitle("B") + 
+  theme_bw() + 
+  theme(plot.title = element_text(vjust = -7, hjust=.02,size = 20, face = "bold" ),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+#combine map and pca together
+map + pca
+#Below not required if Keeping intermeidate files
+#ggsave("fig1.tiff", height=10, width=10, units='in', dpi=900)
+
+```
+
+

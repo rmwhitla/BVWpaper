@@ -2,7 +2,7 @@
 title: "Main Figures & Analysis"
 format:
   pdf:
-    fig-dpi: 900
+    fig-dpi: 1000
     fig-width: 10
     fig-height: 10
 include-in-header: 
@@ -50,11 +50,11 @@ options(ggrepel.max.overlaps = Inf)
 detail<- ggplot(data=world) +
   geom_sf(colour="black",fill="white" )+
   geom_point( data=info %>% filter(Original_region == "GB"), 
-              size=2, aes(x=longitude, y=latitude), shape=19, alpha=0.75) + 
-  geom_point( data=info %>% filter(Original_region == "Europe"), size=2, 
-              aes(x=longitude, y=latitude), shape=17, alpha=0.75) + 
+              size=2.5, aes(x=longitude, y=latitude), shape=19) + 
+  geom_point( data=info %>% filter(Original_region == "Europe"), size=2.5, 
+              aes(x=longitude, y=latitude), shape=17) + 
   geom_label_repel(data=info %>% filter(Original_region != "Japan"), 
-                   box.padding = 0.5, aes(x=longitude, y=latitude, label = short_specimen_name), size = 3)+
+                   box.padding = 0.4, point.padding=0.1,aes(x=longitude, y=latitude, label = short_specimen_name), size = 3)+
   coord_sf(xlim = c(-6, 9), ylim = c(45, 53), expand = FALSE) + xlab("") + ylab("") + 
   annotation_scale(location = "bl", width_hint = 0.4) +
   annotation_north_arrow(location = "bl", which_north = "true", 
@@ -87,7 +87,7 @@ white <- readJPEG("./images/white.jpg", native=T)
 
 #Combine all 3 elements to generate single figure
 map <- detail + 
-      inset_element(global, left = .7, bottom = .66, top = 1, right = 1.1) + 
+      inset_element(global, left = .7, bottom = .7, top = 1, right = 1.1) + 
       inset_element(white, left = .87, bottom = 0.01, top = .13, right = .99)
 
 #Step 2: Generate Genotype Likelihoods 

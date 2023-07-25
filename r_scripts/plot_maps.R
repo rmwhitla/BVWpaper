@@ -8,18 +8,16 @@ library(ggspatial)
 library(patchwork)
 library(jpeg)
 library(ggrepel)
-
+library(png)
 
 #read in info file
 info <- read_delim("/storageToo/PROJECTS/Saad/repos/BVWpaper/infofile.tsv", delim="\t", col_types = cols())
 #get map data
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
-#set default plotting theme
+#set default plotting themes
 theme_set(theme_bw())
 options(ggrepel.max.overlaps = Inf)
-#TODO
-#fix random jittering of points? Better way to plot?
 
 #plot the map
 detail<- ggplot(data=world) +
@@ -40,7 +38,7 @@ detail<- ggplot(data=world) +
 #print the map
 detail
 
-#inset
+#inset to disaply the general regions
 global<- ggplot(data=world) +
   geom_sf(colour="black",fill="white" )+
   coord_sf(xlim = c(-11, 17), ylim = c(37, 63), expand = T) + 
@@ -50,17 +48,18 @@ global<- ggplot(data=world) +
         panel.grid.major = element_blank(),panel.background = element_rect(fill = "aliceblue"), 
         panel.border = element_rect(color = "black",fill = NA, size = 1),
         plot.margin=grid::unit(c(0,0,0,0), "mm"))
-global
+#global
 
 #get butterfly image
 white <- readJPEG("/storageToo/PROJECTS/Saad/repos/BVWpaper/white.jpg", native=T)
+#white <- readPNG("/storageToo/PROJECTS/Saad/repos/BVWpaper/whitecar.png", native=T)
 #white_filt <- removeBackground(white)
 
 #Plot map 
 detail + inset_element(global, left = .7, bottom = .66, top = 1, right = 1.1) + inset_element(white, left = .87, bottom = 0.01, top = .13, right = .99)
 
-
 #Same for common blue
+#Get data first
 lat = c(58.18553, 57.87810, 57.87810, 51.78256, 44.15734, 44.15734, 44.15734)
 long=c(-7.025334,  -4.016982, -4.016982,  -1.125439, 1.982669, 1.982669, 1.982669)
 labels=c("TULf73", "DGCf87", "DGCm100", "BMDf276", "FRNm003", "FRNm006", "FRNm007")
@@ -82,13 +81,13 @@ bluedetail <- ggplot(data=world) +
         axis.ticks = element_blank(),
         panel.grid.major = element_blank(),panel.background = element_rect(fill = "aliceblue"),
         plot.margin=grid::unit(c(0,0,0,0), "mm"))
-#print the map
-bluedetail
+#check the map
+#bluedetail
 
 #get butterfly image
-blue <- readJPEG("/storageToo/PROJECTS/Saad/repos/BVWpaper/blue.jpg", native=T)
-
+#blue <- readJPEG("/storageToo/PROJECTS/Saad/repos/BVWpaper/blue.jpg", native=T)
+blue <- readPNG("/storageToo/PROJECTS/Saad/repos/BVWpaper/bluecart.png", native=T)
 #Plot map 
-bluedetail + inset_element(global, left = .66, bottom = .66, top = 1.03, right = 1) + inset_element(blue, left = .87, bottom = 0.01, top = .08, right = .99)
-
+bluedetail + inset_element(global, left = .66, bottom = .66, top = 1.03, right = 1) + inset_element(blue, left = .87, bottom = 0.01, top = .08, right = .99) +
+  theme(panel.background = element_rect(fill = "transparent", colour = NA))
   

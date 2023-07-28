@@ -32,12 +32,12 @@ info <- read_delim("/storageToo/PROJECTS/Saad/repos/BVWpaper/infofile.tsv", deli
 angsdThetaDf <- inner_join(angsdThetaDf, info, by="sample_name")
 #boxplot by location
 angsdThetaDf %>% 
-  ggplot(aes(x=Region, y=as.numeric(theta_est)*1000)) +
+  ggplot(aes(x=actual_region, y=as.numeric(theta_est)*1000)) +
   geom_boxplot(outlier.shape = NA) + geom_jitter(aes(shape=origin), size=2) + theme_bw()  + xlab("Region of Origin") + ylab("Heterozygotes/1000 basepairs")
 
 #scatterplot of british samples over years
 angsdThetaDf  %>% 
-  filter(Region=="GB") %>%
+  filter(actual_region=="GB") %>%
   ggplot(aes(x=year, y=as.numeric(theta_est)*1000)) +
   geom_point(size=3,pch=21,aes(fill=location)) +  scale_fill_manual(values=c("#ffb14e", "#fa8775","#ea5f94", "#cd34b5", "#aca7a7"))+
   theme_bw()  + xlab("Year") + ylab("Heterozygotes/1000 basepairs") + geom_smooth(method='lm') +
@@ -49,4 +49,10 @@ angsdThetaDf  %>%
 theatdf <- angsdThetaDf  %>% 
   filter(origin!="Japan")
 
-t.test((theta_est)*1000~Region, data=theatdf)
+summary(aov((theta_est)*1000~mean_coverage_recaled_bams+ actual_region, data=angsdThetaDf ))
+anova(lm(theta_est~mean_coverage_recaled_bams+year, data=angsdThetaDf,
+         subset= angsdThetaDf$actual_region == "GB"))
+
+angsdThetaDf_GB <- angsdThetaDf  %>% filter(actual_region=="GB")
+anova(lm(theta_est~mean_coverage_recaled_bams+year, data=angsdThetaDf_GB,
+         subset= angsdThetaDf$short_specimen_name != "NHM050"))

@@ -3,9 +3,9 @@ library(detectRUNS)
 library(dplyr)
 
 #PATH to .hom run file from Plink 
-hRunFile <- "/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/historical/ROH/Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.1.hwe0.05.homsnp25.homkb50.homwinsnp100.homwinhet2.homwinmis10.homhet3.hom"
+hRunFile <- "/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/paramtestresults//historical/ROH/Aporia_crataegi-GCA_912999735.1-softmasked.historical.merged.biallelic.fmissing0.1.hwe0.05.homsnp25.homkb50.homwinsnp100.homwinhet2.homwinmis10.homhet3.hom"
 #modern genomes
-mRunFile <- "/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/results/modern/ROH/Aporia_crataegi-GCA_912999735.1-softmasked.modern.merged.biallelic.fmissing0.1.hwe0.05.homsnp25.homkb50.homwinsnp100.homwinhet2.homwinmis10.homhet3.hom"
+mRunFile <- "/storage/PROJECTS/Rebecca/GenErodeResults/GenErode/paramtestresults/modern/ROH/Aporia_crataegi-GCA_912999735.1-softmasked.modern.merged.biallelic.fmissing0.1.hwe0.05.homsnp25.homkb50.homwinsnp100.homwinhet2.homwinmis10.homhet3.hom"
 
 #Read in the data
 hRuns <- readExternalRuns(inputFile = hRunFile, program="plink")
@@ -152,8 +152,8 @@ FROH_class <- FROH_class %>% rename("sample_name" = "id")
 FROH_df <- inner_join(FROH_class, info, by="sample_name")
 
 FROH_df %>% 
-  filter(Region=="GB") %>%
-  ggplot(aes(x=year, y=Froh_Class_0.1)) +
+  filter(actual_region=="GB") %>%
+  ggplot(aes(x=year, y=Froh_Class_0.2)) +
   geom_point(size=3) +  #scale_fill_manual(values=c("#ffb14e", "#fa8775","#ea5f94", "#cd34b5", "#aca7a7"))+
   theme_bw()  + xlab("Year") + ylab("FROH 200 kb") + geom_smooth(method='lm') +
   geom_text_repel(aes(label = sample_name), size = 3, max.overlaps = 30)+
@@ -163,10 +163,12 @@ FROH_df %>%
 
 #plot FROH between groups
 FROH_df %>% 
-  ggplot(aes(x=Region, y=Froh_Class_0.1)) +
+  ggplot(aes(x=actual_region, y=Froh_Class_0.2)) +
   geom_boxplot() +geom_jitter()+ #scale_fill_manual(values=c("#ffb14e", "#fa8775","#ea5f94", "#cd34b5", "#aca7a7"))+
   theme_bw()  + xlab("Region") + ylab("FROH 100 kb") + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 wilcox.test(Froh_Class_0.1~Region, data=FROH_df)
-t.test(Froh_Class_0.1~Region, data=FROH_df)
+summary(aov(Froh_Class_0.1~mean_coverage_recaled_bams+ actual_region, data=FROH_df))
+FROH_df_GB <- FROH_df  %>% filter(actual_region=="GB")
+anova(lm(Froh_Class_0.1~mean_coverage_recaled_bams+ year, data=FROH_df_GB))

@@ -171,4 +171,4 @@ FROH_df %>%
 wilcox.test(Froh_Class_0.1~Region, data=FROH_df)
 summary(aov(Froh_Class_0.1~mean_coverage_recaled_bams+ actual_region, data=FROH_df))
 FROH_df_GB <- FROH_df  %>% filter(actual_region=="GB")
-anova(lm(Froh_Class_0.1~mean_coverage_recaled_bams+ year, data=FROH_df_GB))
+anova(lm(Froh_Class_0.4~mean_coverage_recaled_bams+ year, data=FROH_df_GB))

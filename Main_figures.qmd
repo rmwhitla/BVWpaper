@@ -3,8 +3,8 @@ title: "Main Figures & Analysis"
 format:
   pdf:
     fig-dpi: 1000
-    fig-width: 10
-    fig-height: 10
+    fig-width: 12
+    fig-height: 12
 include-in-header: 
   text: |
     \usepackage{fvextra}
@@ -20,6 +20,9 @@ This should be a two panel plot. Panel A shows map of BVW sampling localities an
 ```{r}
 #| label: Fig 1
 #| fig-cap: "Figure 1"
+#| echo: false
+#| message: false
+#| warning: false
 
 #Load require packages
 library(readr)
@@ -34,6 +37,8 @@ library(jpeg)
 library(ggrepel)
 library(stringr)
 library(ggpubr)
+library(tidyr)
+library(forcats)
 
 #Step 1: plot the points on a map
 
@@ -50,9 +55,9 @@ options(ggrepel.max.overlaps = Inf)
 detail<- ggplot(data=world) +
   geom_sf(colour="black",fill="white" )+
   geom_point( data=info %>% filter(Original_region == "GB"), 
-              size=2.5, aes(x=longitude, y=latitude), shape=19) + 
+              size=2.5, aes(x=longitude, y=latitude), shape=21, fill="#003f5c") + 
   geom_point( data=info %>% filter(Original_region == "Europe"), size=2.5, 
-              aes(x=longitude, y=latitude), shape=17) + 
+              aes(x=longitude, y=latitude), shape=21, fill="#ffa600") + 
   geom_label_repel(data=info %>% filter(Original_region != "Japan"), 
                    box.padding = 0.4, point.padding=0.1,aes(x=longitude, y=latitude, label = short_specimen_name), size = 3)+
   coord_sf(xlim = c(-6, 9), ylim = c(45, 53), expand = FALSE) + xlab("") + ylab("") + 
@@ -61,7 +66,7 @@ detail<- ggplot(data=world) +
                          #pad_x = unit(0.75, "in"), pad_y = unit(0.5, "in"),
                          style = north_arrow_minimal) +
   ggtitle("A") + 
-  theme(plot.title = element_text(vjust = -7, hjust=0.02, size = 20, face = "bold"),
+  theme(plot.title = element_text( hjust=0.02, size = 20, face = "bold"),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks = element_blank(),
@@ -69,7 +74,7 @@ detail<- ggplot(data=world) +
         panel.background = element_rect(fill = "aliceblue"),
         plot.margin=grid::unit(c(0,0,0,0), "mm") )
 
-#inset to disaply the general regions
+#inset to display the general regions
 global<- ggplot(data=world) +
   geom_sf(colour="black",fill="white" )+
   coord_sf(xlim = c(-11, 17), ylim = c(37, 63), expand = T) + 
@@ -95,12 +100,12 @@ map <- detail +
 
 #Step 3: Perform PCA  with MAF of 10% and plot
 #read in covariance matix output from angsd
-C <- as.matrix(read.table("./angsdPCA.cov"))
+C <- as.matrix(read.table("./angsd_out/angsdPCA.cov"))
 #perform eigendecomposition of matrix
 e <- eigen(C)
 
 #read in order of samples from PCAangsd
-sampleOrder <- read.table("./BAMS.txt")
+sampleOrder <- read.table("./BAMListAll.txt")
 #combine eigenvectors with info
 pca <- data.frame(sample_name=str_extract(basename(sampleOrder$V1),  
                   "[^\\.]+"), PC1=e$vectors[,1], PC2=e$vectors[,2], PC3=e$vectors[,3])
@@ -114,21 +119,62 @@ pc3=round(e$values[3]/sum(e$values) *100,2)
 
 #Plot the PCA
 pca <- angsdPCAdf %>%
-  ggplot(aes(x=PC1, y=PC2,shape=Original_region, col= Region_postPCA)) +
+  ggplot(aes(x=PC1, y=PC2,col=Original_region, shape= Region_postPCA)) +
   geom_point(size=2, aes())+ scale_shape_manual(values=c(17,19)) +
-  scale_color_manual(values=c("dark grey", "#000000"))+
+  scale_color_manual(values=c("#ffa600", "#003f5c"))+
   geom_label_repel(aes(label = short_specimen_name), size = 3)+
   guides(color="none", shape="none") +
   xlab(paste0("PC1 ", pc1, "%")) + ylab(paste0("PC1 ", pc2, "%"))+
   coord_fixed(ratio=1) + 
   ggtitle("B") + 
   theme_bw() + 
-  theme(plot.title = element_text(vjust = -7, hjust=.02,size = 20, face = "bold" ),
+  theme(plot.title = element_text( hjust=.02,size = 20, face = "bold" ),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
+#Step 3: Plot NGSAdmix ancestry results
+#---------------------------------------------------------
+#PATHS to files
+
+#pop label file
+popPATH="./angsd_out/poplabel"
+
+#path to inferred admixture proportions file
+admixPATH="./angsd_out/NGSAdmix.qopt"
+#--------------------------------------------------------
+
+#read in pop label file
+pop <- read.table(popPATH, header=T)
+# Read inferred admixture proportions file
+q<-read.table(admixPATH)
+#plotting with ggplot2
+admixData <- cbind(pop,q)
+# order according to population
+ord<-order(pop[,2])
+#arrange by labels
+admixData <- admixData %>% arrange(PCA)
+#convert ancestry proportions to long format for ggplot2
+admixData <- admixData %>% pivot_longer(starts_with("V"), names_to = "Ancestry")
+#plot stacked barplot
+admix <- admixData %>% 
+  ggplot(aes(x=fct_inorder(Short_ID), y=value, fill=Ancestry)) +
+  geom_bar(position="stack", stat="identity", width=1) +
+  theme_bw() + xlab("") + ylab("Ancestry Proportion with K=2") +
+  scale_fill_manual (values=c("#ffa600", "#003f5c"), labels=c("Europe", "GB")) + #Legend control
+  theme(plot.title = element_text( hjust=0.02, size = 20, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=10),
+        legend.position = c(0.8,.2)) + #no gridlines
+  coord_cartesian( expand =0 ) + #no additional space at bottom of margins
+  geom_vline(xintercept =cumsum(sapply(unique(pop[ord,2]),function(x){sum(pop[ord,2]==x)}))[1]+0.5,col="red",lwd=1.5) + #demarcate end of samples group
+  geom_vline(xintercept =cumsum(sapply(unique(pop[ord,2]),function(x){sum(pop[ord,2]==x)}))[2]+0.5,col="red",lwd=1.5) + #demarcate enf of samples group
+  ggtitle("C")
+
+#Final step: combine with pathcwork
+
 #combine map and pca together
-map + pca
+map + pca + admix + plot_layout(ncol = 2)
 #Below not required if Keeping intermeidate files
 #ggsave("fig1.tiff", height=10, width=10, units='in', dpi=900)
 

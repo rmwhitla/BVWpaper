@@ -3,13 +3,16 @@
 #A script to calcualte heterozygsity from bam file using ANGSd (using genotype likelelihoods
 #Input a list of BAM files
 
+#---------------------------------------------------------------------------------
+#SETUP
 #the reference location and output location should also be set
 REF=/storage/PROJECTS/Rebecca/genomes/Aporia_crataegi-GCA_912999735.1-softmasked.fa
 OUTDIR=/storageToo/PROJECTS/Saad/repos/BVWpaper/angsd_het 
 
 #angsd and realSFS should be in your path
 
-BAMFILE=$1 # user suppliet path to all BAM files
+BAMFILE=$1 # user supplied path to all BAM files
+#----------------------------------------------------------------------------------
 
 while read -r BAM
 do	

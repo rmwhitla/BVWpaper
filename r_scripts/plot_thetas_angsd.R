@@ -44,6 +44,13 @@ angsdThetaDf  %>%
   geom_text_repel(aes(label = sample_name), size = 3, max.overlaps = 30)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
+#scatterplot of coverage against heterozyosity
+angsdThetaDf %>% 
+  ggplot(aes(x=mean_coverage_recaled_bams, y=as.numeric(theta_est)*1000)) +
+  geom_point() +
+  geom_text_repel(aes(label = sample_name), size = 3, max.overlaps = 30)+
+  theme_bw()  + xlab("Mean coverage") + ylab("Heterozygotes/1000 basepairs")
+
 #t.test
 #remove japanese sample if present
 theatdf <- angsdThetaDf  %>% 
@@ -54,5 +61,7 @@ anova(lm(theta_est~mean_coverage_recaled_bams+year, data=angsdThetaDf,
          subset= angsdThetaDf$actual_region == "GB"))
 
 angsdThetaDf_GB <- angsdThetaDf  %>% filter(actual_region=="GB")
-anova(lm(theta_est~mean_coverage_recaled_bams+year, data=angsdThetaDf_GB,
+anova(lm(theta_est~mean_coverage_recaled_bams + year, data=angsdThetaDf_GB,
          subset= angsdThetaDf$short_specimen_name != "NHM050"))
+anova(lm(theta_est~mean_coverage_recaled_bams + year, data=angsdThetaDf_GB))
+

@@ -8,10 +8,10 @@ library(ggplot2)
 #PATHS to files
 
 #pop label file
-popPATH="/storageToo/PROJECTS/Saad/repos/BVWpaper/angsd_out/poplabel"
+popPATH="/storageToo/PROJECTS/Saad/repos/BVWpaper/poplabel"
 
 #path to inferred admixture proportions file
-admixPATH="/storageToo/PROJECTS/Saad/repos/BVWpaper/angsd_out/NGSAdmix.qopt"
+admixPATH="/storageToo/PROJECTS/Saad/repos/BVWpaper/angsd_out/NGSAdmix_0.1.missing.K3_3.qopt"
 #--------------------------------------------------------
 
 #read in pop label file
@@ -22,7 +22,7 @@ q<-read.table(admixPATH)
 #Plot in base R
 # order according to population
 ord<-order(pop[,2])
-barplot(t(q)[,ord],col=2:10,space=0,border=NA,xlab="",ylab="Admixture proportions for K=2", names.arg=pop[ord,4], cex.names=0.75, las=2)
+barplot(t(q)[,ord],col=2:10,space=0,border=NA,xlab="",ylab="Admixture proportions for K=2", names.arg=pop[ord,1], cex.names=0.75, las=2)
 text(tapply(1:nrow(pop),pop[ord,2],mean),-.3,unique(pop[ord,2]),xpd=T)
 abline(v=cumsum(sapply(unique(pop[ord,2]),function(x){sum(pop[ord,2]==x)})),col=1,lwd=1.2)
 

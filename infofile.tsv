@@ -1,18 +1,18 @@
-sample_name	origin	specimen_voucher	short_specimen_name	year	location	kent	latitude	longitude	average_coverage	sex 	Region_postPCA	mean_coverage_recaled_bams	median_coverage_recaled_bams	Original_region	actual_region
-K05L	England	K05L	K05L	1895	Unknown	NA	NA	NA			same	4.7	4	GB	GB
-NHM0247274489	Wales	BMNH(E)1078888	NHM489	1871	Newport	No	51.57932	-3.002			same	7.9	7	GB	GB
-NHM0247274898	England	BMNH(E)1078997	NHM898	1908	East Kent	Yes	51.2074	1.0051			Europe	7.1	6	GB	Europe
-NHM0247274918	England	BMNH(E)1090007	NHM918	1924	Herne Bay	Yes	51.3759	1.1283			Europe	6	5	GB	Europe
-NHM0247274928	England	BMNH(E)1290456	NHM928	1900	East Kent	Yes	51.2074	1.0051			same	4.7	4	GB	GB
-NHM0247276019	England	BMNH(E)1079035	NHM019	1908	East Kent	Yes	51.2074	1.0051			same	6	5	GB	GB
-NHM0247276026	England	BMNH(E)1078940	NHM026	1858	Herne Bay	Yes	51.3759	1.1283			same	10.8	10	GB	GB
-NHM0247276027	England	BMNH(E)1080325	NHM027	1888	New Forest	No	50.8759	-1.6328			Europe	5.5	5	GB	Europe
-NHM0247276050	Wales	BMNH(E)1078887	NHM050	1871	Newport	No	51.5793	-3.002			same	2.7	2	GB	GB
-OX10	England	OX10	OX10	1860	Herne Bay	Yes	51.3759	1.1283			same	5.8	5	GB	GB
-OX11	Belgium	OX11	OX11	1907	Namur Prov, Belguim	NA	50.1935	4.8402			same	10.3	10	Europe	Europe
-OX13	Belgium	OX13	OX13	1907	Namur Prov, Belguim	NA	50.1935	4.8402			same	10.1	9	Europe	Europe
-OX15	France	OX15	OX15	1921	Haute Saône, East France	NA	47.757	6.1556			same	6.6	6	Europe	Europe
-OX16	France	OX16	OX16	1921	Haute Saône, East France	NA	47.757	6.1556			same	13.5	11	Europe	Europe
-OX4	England	OX4	OX4	1854	New Forest	No	50.8759	-1.6328			same	4	3	GB	GB
-OX5	England	OX5	OX5	1854	New Forest	No	50.8759	-1.6328			same	6.5	5	GB	GB
-OX8	England	OX8	OX8	1860	Herne Bay	Yes	51.3759	1.1283			same	6.9	6	GB	GB
+sample_name	origin	specimen_voucher	short_specimen_name	year	location	kent	latitude	longitude	average_coverage	sex 	Region_postPCA	mean_coverage_recaled_bams	median_coverage_recaled_bams	Original_region	actual_region	Admix
+K05L	England	K05L	K05L	1895	Unknown	NA	NA	NA			same	4.7	4	GB	GB	GB
+NHM0247274489	Wales	BMNH(E)1078888	NHM489	1871	Newport	No	51.57932	-3.002			same	7.9	7	GB	GB	GB
+NHM0247274898	England	BMNH(E)1078997	NHM898	1908	East Kent	Yes	51.2074	1.0051			Europe	7.1	6	GB	Europe	Europe
+NHM0247274918	England	BMNH(E)1090007	NHM918	1924	Herne Bay	Yes	51.3759	1.1283			Europe	6	5	GB	Europe	Europe
+NHM0247274928	England	BMNH(E)1290456	NHM928	1900	East Kent	Yes	51.2074	1.0051			same	4.7	4	GB	GB	Admixed
+NHM0247276019	England	BMNH(E)1079035	NHM019	1908	East Kent	Yes	51.2074	1.0051			same	6	5	GB	GB	Admixed
+NHM0247276026	England	BMNH(E)1078940	NHM026	1858	Herne Bay	Yes	51.3759	1.1283			same	10.8	10	GB	GB	GB
+NHM0247276027	England	BMNH(E)1080325	NHM027	1888	New Forest	No	50.8759	-1.6328			Europe	5.5	5	GB	Europe	Europe
+NHM0247276050	Wales	BMNH(E)1078887	NHM050	1871	Newport	No	51.5793	-3.002			same	2.7	2	GB	GB	GB
+OX10	England	OX10	OX10	1860	Herne Bay	Yes	51.3759	1.1283			same	5.8	5	GB	GB	Admixed
+OX11	Belgium	OX11	OX11	1907	Namur Prov, Belguim	NA	50.1935	4.8402			same	10.3	10	Europe	Europe	Europe
+OX13	Belgium	OX13	OX13	1907	Namur Prov, Belguim	NA	50.1935	4.8402			same	10.1	9	Europe	Europe	Europe
+OX15	France	OX15	OX15	1921	Haute Saône, East France	NA	47.757	6.1556			same	6.6	6	Europe	Europe	Europe
+OX16	France	OX16	OX16	1921	Haute Saône, East France	NA	47.757	6.1556			same	13.5	11	Europe	Europe	Europe
+OX4	England	OX4	OX4	1854	New Forest	No	50.8759	-1.6328			same	4	3	GB	GB	Admixed
+OX5	England	OX5	OX5	1854	New Forest	No	50.8759	-1.6328			same	6.5	5	GB	GB	Admixed
+OX8	England	OX8	OX8	1860	Herne Bay	Yes	51.3759	1.1283			same	6.9	6	GB	GB	Admixed

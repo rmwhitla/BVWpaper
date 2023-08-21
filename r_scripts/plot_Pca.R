@@ -1,19 +1,19 @@
-#PCA plots for outputs from generode
+#PCA plots for outputs from plink
 library("ggplot2")
 library("ggrepel")
 library(dplyr)
 
 #read in info file
-info <- read_delim("/storageToo/PROJECTS/Saad/repos/BVWpaper/infofile.tsv", delim="\t", col_types = cols())
+info <- read_delim("/storageToo/PROJECTS/Saad/repos/BVWpaper/infofile_P_icarus.csv", delim="\t", col_types = cols())
 
 
 ################################################################
 #Modern + Historical samples
 #CHANGE PATHS AS REQUIRED
 #Path to eigenvector file
-allevecPATH<- "/storageToo/PROJECTS/Saad/scratch/Aporia_crataegi-GCA_912999735.1-softmasked.all.merged.biallelic.fmissing0.1.maf.01.eigenvec"
+allevecPATH<- "/storageToo/PROJECTS/Saad/repos/BVWpaper/plink_pca_out/Polyommatus_icarus_maf_0.3.eigenvec"
 #Path to eigenvalue gile
-allevalPATH <- "/storageToo/PROJECTS/Saad/scratch/Aporia_crataegi-GCA_912999735.1-softmasked.all.merged.biallelic.fmissing0.1.maf.01.eigenval"
+allevalPATH <- "/storageToo/PROJECTS/Saad/repos/BVWpaper/plink_pca_out/Polyommatus_icarus_maf_0.3.eigenval"
 
 #read in the data
 alleigvec <- read.table(allevecPATH)
@@ -36,16 +36,20 @@ pc2=round(alleigval[2,1]/sum(alleigval[1]) *100,1)
 pc3=round(alleigval[3,1]/sum(alleigval[1]) *100,1)
 
 #Plotting time
-allPCAdf %>%
-  ggplot(aes(x=PC1, y=PC2,shape=Region, fill=location)) +
-  geom_point(size=3, aes())+ scale_shape_manual(values=c(21,24,22)) +
-  scale_fill_manual(values=c("#ffb14e", "#0000ff", "#fa8775", "#000000","#0000ff", "#ea5f94", "#cd34b5", "#aca7a7"))+
-  geom_text_repel(aes(label = sample_name), size = 3, max.overlaps = 45)+
-  guides(fill=guide_legend(override.aes = list(shape=21))) +
-  xlab(paste0("PC1 ", pc1, "%")) + ylab(paste0("PC1 ", pc2, "%"))+ coord_fixed(ratio=1) + stat_ellipse(aes(group=Region)) +
-  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+pca <- allPCAdf %>%
+  ggplot(aes(x=PC1, y=PC2,col=origin)) +
+  geom_point(size=2) +
+  scale_color_manual(values=c("#ffa600", "#003f5c"))+
+  geom_text_repel(aes(label = sample_name), size = 3)+
+  guides(color="none", shape="none") +
+  xlab(paste0("PC1 ", pc1, "%")) + ylab(paste0("PC1 ", pc2, "%"))+
+  coord_fixed(ratio=1) + 
+  theme_bw() + 
+  theme(plot.title = element_text( hjust=.02,size = 20, face = "bold" ),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
 
-
+pca
 ################################################################################
 #Historical samples only
 
